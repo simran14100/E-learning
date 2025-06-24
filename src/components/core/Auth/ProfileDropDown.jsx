@@ -1,13 +1,12 @@
-import { useRef, useState } from "react"
+import React, { useRef, useState } from "react"
+import { useSelector, useDispatch } from "react-redux"
+import { logout } from "../../../services/operations/authApi"
+import { Link, useNavigate } from "react-router-dom"
 import { AiOutlineCaretDown } from "react-icons/ai"
 import { VscDashboard, VscSignOut } from "react-icons/vsc"
-import { useDispatch, useSelector } from "react-redux"
-import { Link, useNavigate } from "react-router-dom"
-
 import useOnClickOutside from "../../../hooks/useOnClickOutside"
-import { logout } from "../../../services/operations/authApi"
 
-export default function ProfileDropdown() {
+export default function ProfileDropDown({ mobile = false }) {
   const { user } = useSelector((state) => state.profile)
   const dispatch = useDispatch()
   const navigate = useNavigate()
@@ -15,45 +14,61 @@ export default function ProfileDropdown() {
   const ref = useRef(null)
 
   useOnClickOutside(ref, () => setOpen(false))
+
   if (!user) return null
-   
-  // console.log("Profile dropdown user",user);
-  
 
   return (
-    <button className="relative" onClick={() => setOpen(true)}>
-      <div className="flex items-center gap-x-1">
-        <img
-          src={user?.image}
-          alt={`profile-${user?.firstName}`}
-          className="aspect-square w-[30px] rounded-full object-cover"
-        />
-        <AiOutlineCaretDown className="text-sm text-richblack-50" />
-      </div>
+    <div className={`relative ${mobile ? "w-full" : ""}`} ref={ref}>
+      {/* Profile Button */}
+      <button
+  className="flex w-full items-center justify-between gap-x-2"
+  onClick={() => setOpen((prev) => !prev)}
+>
+  <div className="flex items-center gap-x-2">
+    <img
+      src={user?.image || "/default-avatar.png"}
+      alt={`profile-${user?.firstName}`}
+      className="aspect-square w-[30px] rounded-full object-cover"
+    />
+    <AiOutlineCaretDown
+      className={`text-sm text-richblack-50 transition-transform duration-200 ${
+        open ? "rotate-180" : ""
+      }`}
+    />
+  </div>
+</button>
+
+
+      {/* Dropdown Menu */}
       {open && (
         <div
-          onClick={(e) => e.stopPropagation()}
-          className="absolute top-[118%] right-0 z-[1000] divide-y-[1px] divide-richblack-700 overflow-hidden rounded-md border-[1px] border-richblack-700 bg-richblack-800"
-          ref={ref}
+          className={`${
+            mobile
+              ? "mt-2 flex flex-col gap-y-1 rounded-md bg-richblack-800 p-2 shadow-sm"
+              : "absolute top-[118%] right-0 z-[1000] min-w-[150px] divide-y-[1px] divide-richblack-700 overflow-hidden rounded-md border border-richblack-700 bg-richblack-800"
+          }`}
         >
-          <Link to="/dashboard/my-profile" onClick={() => setOpen(false)}>
-            <div className="flex w-full items-center gap-x-1 py-[10px] px-[12px] text-sm text-richblack-100 hover:bg-richblack-700 hover:text-richblack-25">
-              <VscDashboard className="text-lg" />
-              Dashboard
-            </div>
+          <Link
+            to="/dashboard/my-profile"
+            onClick={() => setOpen(false)}
+            className="flex items-center gap-x-2 py-2 px-3 text-sm text-richblack-100 hover:bg-richblack-700 hover:text-richblack-25"
+          >
+            <VscDashboard className="text-lg" />
+            Dashboard
           </Link>
-          <div
+
+          <button
             onClick={() => {
               dispatch(logout(navigate))
               setOpen(false)
             }}
-            className="flex w-full items-center gap-x-1 py-[10px] px-[12px] text-sm text-richblack-100 hover:bg-richblack-700 hover:text-richblack-25"
+            className="flex items-center gap-x-2 py-2 px-3 text-sm text-richblack-100 hover:bg-richblack-700 hover:text-richblack-25"
           >
             <VscSignOut className="text-lg" />
             Logout
-          </div>
+          </button>
         </div>
       )}
-    </button>
+    </div>
   )
 }

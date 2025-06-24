@@ -25,6 +25,8 @@ import CourseDetails from "./pages/CourseDetails"
 import ViewCourse from "./pages/ViewCourse"
 import VideoDetails from "./components/core/ViewCourse/VideoDetails"
 import Instructor from "./components/core/Dashboard/Instructor"
+import Simran from "./pages/Simran";
+
 
 import { ACCOUNT_TYPE } from "./utils/constants"
 
@@ -138,6 +140,8 @@ function App() {
             </>
           )}
         </Route>
+
+      <Route path="/simran" element={<Simran/>} />
         
     </Routes>
 

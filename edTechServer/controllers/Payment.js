@@ -1,4 +1,4 @@
-const { instance } = require("../config/razorpay")
+const {instance} = require("../config/razorpay")
 const Course = require("../models/Course")
 const crypto = require("crypto")
 const User = require("../models/User")
@@ -95,10 +95,13 @@ exports.verifyPayment = async (req, res) => {
 
   let body = razorpay_order_id + "|" + razorpay_payment_id
 
+  console.log("raz- secreat " , process.env.RAZORPAY_SECRET)
+  console.log("raz-key" , process.env.RAZORPAY_KEY)
   const expectedSignature = crypto
     .createHmac("sha256", process.env.RAZORPAY_SECRET)
     .update(body.toString())
     .digest("hex")
+
 
   if (expectedSignature === razorpay_signature) {
     await enrollStudents(courses, userId, res)

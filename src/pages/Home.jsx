@@ -15,6 +15,7 @@ import ReviewSlider from "../components/common/ReviewSlider"
 const Home=()=>{
     return(
         <div> 
+        <Link to="/calculator">Calculator</Link>
             {/*Section 1*/}
             <div className="mx-auto relative flex flex-col w-9/12 items-center max-w-maxContent text-white justify-between ">
 
@@ -23,10 +24,12 @@ const Home=()=>{
             transition-all duration-200 hover:scale-95 w-fit group">     
                 <div className="flex flex-row items-center gap-2 rounded-full transition-all duration-200 px-[10px] py-[5px] group-hover:bg-richblack-900">
                     <p>Become an Instructor</p>
+                
                     {/*icon*/}
                     <FaArrowRight/>
 
                 </div>
+                <Link to="/calculator">Calculator</Link>
             </div>
                 </Link>
 

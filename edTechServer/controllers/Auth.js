@@ -56,8 +56,6 @@ exports.sendotp = async (req, res) => {
     }
   }
   
-
-
 // signup
 
 exports.signup = async (req, res) => {

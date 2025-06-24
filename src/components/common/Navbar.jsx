@@ -42,6 +42,10 @@ const Navbar = () => {
    
     const [loading, setLoading] = useState(false)
     const [subLinks, setSubLinks]  = useState([]);
+    const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false);
+    const [isCatalogOpen, setIsCatalogOpen] = useState(false);
+
+
 
     const fetchSublinks = async() => {
         try{
@@ -72,6 +76,7 @@ const Navbar = () => {
       <Link to="/">
         <img src={logo} width={160} height={42} loading='lazy' alt="abc"/>
       </Link>
+      
 
       {/* Navigation links */}
       <nav className="hidden md:block">
@@ -165,16 +170,119 @@ const Navbar = () => {
           )}
           {token !== null && <ProfileDropDown />}
         </div>
-        <button className="mr-4 md:hidden">
+        {/* <button className="mr-4 md:hidden">
           <AiOutlineMenu fontSize={24} fill="#AFB2BF" />
-        </button>
+        </button> */}
       
-        
-  
+      <button
+  className="mr-4 md:hidden"
+  onClick={() => setIsMobileMenuOpen((prev) => !prev)}
+>
+  <AiOutlineMenu fontSize={24} fill="#AFB2BF" />
+</button>
+
+{isMobileMenuOpen && (
+  <div className="absolute top-14 left-0 z-50 w-full bg-richblack-900 px-6 py-4 shadow-lg md:hidden">
+    {/* Nav Links */}
+    <ul className="flex flex-col gap-4 text-richblack-25">
+      {NavbarLinks.map((link, index) => (
+  <li key={index}>
+    {link.title === "Catalog" ? (
+      <div>
+        <button
+          className="flex w-full items-center justify-between text-left text-richblack-100"
+          onClick={() => setIsCatalogOpen((prev) => !prev)}
+        >
+          <span className="flex items-center gap-2">
+            Catalog
+            <BsChevronDown
+              className={`transition-transform duration-200 ${
+                isCatalogOpen ? "rotate-180" : ""
+              }`}
+            />
+          </span>
+        </button>
+
+        {isCatalogOpen && (
+          <div className="ml-3 mt-2 flex flex-col gap-2">
+            {subLinks?.map((subLink, i) => (
+              <Link
+                to={`/catalog/${subLink.name
+                  .split(" ")
+                  .join("-")
+                  .toLowerCase()}`}
+                key={i}
+                className="rounded-lg px-2 py-2 text-sm text-richblack-100 hover:bg-richblack-700"
+                onClick={() => {
+                  setIsCatalogOpen(false)
+                  setIsMobileMenuOpen(false)
+                }}
+              >
+                {subLink.name}
+              </Link>
+            ))}
+          </div>
+        )}
+      </div>
+    ) : (
+      <Link
+        to={link?.path}
+        onClick={() => setIsMobileMenuOpen(false)}
+        className={`block text-richblack-100 ${
+          matchRoute(link?.path) ? "text-yellow-25" : ""
+        }`}
+      >
+        {link.title}
+      </Link>
+    )}
+  </li>
+))}
+
+    </ul>
+
+    {/* Auth Buttons / Cart / Profile */}
+    <div className="mt-6 flex flex-col gap-3">
+      {user && user?.accountType !== ACCOUNT_TYPE.INSTRUCTOR && (
+        <Link
+          to="/dashboard/cart"
+          className="relative w-fit"
+          onClick={() => setIsMobileMenuOpen(false)}
+        >
+          <AiOutlineShoppingCart className="text-2xl text-richblack-100" />
+          {totalItems > 0 && (
+            <span className="absolute -bottom-2 -right-2 grid h-5 w-5 place-items-center overflow-hidden rounded-full bg-richblack-600 text-center text-xs font-bold text-yellow-100">
+              {totalItems}
+            </span>
+          )}
+        </Link>
+      )}
+
+      {token === null && (
+        <>
+          <Link to="/login" onClick={() => setIsMobileMenuOpen(false)}>
+            <button className="w-full rounded-md border border-richblack-700 bg-richblack-800 px-4 py-2 text-richblack-100">
+              Log in
+            </button>
+          </Link>
+          <Link to="/signup" onClick={() => setIsMobileMenuOpen(false)}>
+            <button className="w-full rounded-md border border-richblack-700 bg-richblack-800 px-4 py-2 text-richblack-100">
+              Sign up
+            </button>
+          </Link>
+        </>
+      )}
+
+      {token !== null && <div className="w-full">
+    <ProfileDropDown mobile={true} />
+  </div>}
+    </div>
+  </div>
+)}
+
 
     </div>
     </div>
   )
-}
+}  
 
 export default Navbar

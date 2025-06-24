@@ -93,6 +93,7 @@ exports.categoryPageDetails = async (req, res) => {
       const categoriesExceptSelected = await Category.find({
         _id: { $ne: categoryId },
       })
+      console.log(categoriesExceptSelected);
       let differentCategory = await Category.findOne(
         categoriesExceptSelected[getRandomInt(categoriesExceptSelected.length)]
           ._id
@@ -113,6 +114,7 @@ exports.categoryPageDetails = async (req, res) => {
           },
         })
         .exec()
+        console.log(differentCategory);
       const allCourses = allCategories.flatMap((category) => category.courses)
       const mostSellingCourses = allCourses
         .sort((a, b) => b.sold - a.sold)
@@ -130,7 +132,7 @@ exports.categoryPageDetails = async (req, res) => {
       return res.status(500).json({
         success: false,
         message: "Internal server error",
-        error:message.error
+        error: error.message
       })
     }
   }
