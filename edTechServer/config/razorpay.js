@@ -5,4 +5,8 @@ const instance = new Razorpay({
   key_secret: process.env.RAZORPAY_SECRET // Ensure this is correct
 });
 
+<<<<<<< HEAD
 module.exports = { instance };
+=======
+module.exports = { instance };
+>>>>>>> 0b170875e897822106bb4a86185aec4173644f1a
