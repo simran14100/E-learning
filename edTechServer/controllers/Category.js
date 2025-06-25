@@ -132,11 +132,7 @@ exports.categoryPageDetails = async (req, res) => {
       return res.status(500).json({
         success: false,
         message: "Internal server error",
-<<<<<<< HEAD
-        error: error.message
-=======
         error:error.message
->>>>>>> 0b170875e897822106bb4a86185aec4173644f1a
       })
     }
   }
